@@ -5,6 +5,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 
 public class Formulario extends JFrame implements ChangeListener,ItemListener {
     // aqui definiremos los nombre de las variables, las posiciones y el numero de variables.
@@ -13,7 +16,7 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
     JTextField [] TextField = new JTextField[8];
     String [] TextoLabel ={"Nombre:","Apellido:","Dirección:","telefono:","CP:","NIF:","Email:","Contraseña:","Pais:","Provincia:","Poblacion:","Sexo:","Idiomas:","carta de presentación"};
     String [] Paises ={"España","Francia","Portugal"};
-    int [] xLabels = {10,330,10,330,10,330,10,300,10,160,360,10,330,10};
+    int [] xLabels = {10,330,10,330,10,330,10,300,10,160,360,10,310,10};
     int [] yLabels = {10,10,60,60,110,110,160,160,210,210,210,260,260,315};
     int [] xTextField = {120,450,120,450,120,450,120,460};
     int [] yTextField = {15,15,65,65,115,115,165,215};
@@ -115,7 +118,7 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
     }
     private void initTExtPane() {
         //este text panel es donde se trasmitira toda la información que hemos escrito en nuestro formulario
-        ejecutado.setBounds(750,10,400,650);
+        ejecutado.setBounds(800,10,400,650);
         ejecutado.setBorder(new LineBorder(Color.DARK_GRAY));
         ejecutado.setVisible(false);
         add(ejecutado);
@@ -208,35 +211,60 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
     }
 
     private void intitCombobox() {
-        //En el combo box daremos la opción de elegir el lugar donde vive
-        Pais=new JComboBox();
+        Pais = new JComboBox();
+        Pais.addItem("pais");
+        Pais.addItem("España");
+        Pais.addItem("EEUU");
         Pais.setBounds(60,215,80,20);
         add(Pais);
-        String paisecogido = "";
 
-        //aqui proponemos los paises
-        Pais.addItem(Paises[0]);
-        Pais.addItem(Paises[1]);
-        Pais.addItem(Paises[2]);
-        Pais.addItemListener(this);
+        //normalmente se debe escoger entre dos txt para conseguir que cada pais tenga su numero especifico de provincias
+        Provincia = new JComboBox();
+        Provincia.setBounds(260,210,90,20);
+        add(Provincia);
 
+        Pais.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (Pais.getSelectedItem() == "EEUU") {
+                    Provincia.removeAllItems();
+                    Provincia.getSelectedItem();
 
+                    try {
+                        File rutaEEUU = new File("C:\\accdat\\EEUU.txt");
+                        FileReader escribir = new FileReader(rutaEEUU);
+                        BufferedReader BR = new BufferedReader(escribir);
+                        String linea = BR.readLine();
 
-        //intente usar change itemStateChanged, pero no conseguí generar los cambios. he pensado en borrarlos cada vez que se cambiaran de
-        //seleccion pero sin resultado.
-        paisecogido = (String) Pais.getItemAt(Pais.getSelectedIndex());
-        System.out.println(paisecogido);
-        if (paisecogido.equals("España")) {
-            //estas son las provincias definidas
-            Provincia = new JComboBox();
-            Provincia.setBounds(260, 215, 90, 20);
+                        while (linea != null) {
+                            Provincia.addItem(linea);
+                            linea = BR.readLine();
+                        }
+                    } catch (Exception Ex) {
+                    }
+                }
 
-            add(Provincia);
-            Provincia.addItem("Madrid");
-            Provincia.addItem("Barcelona");
-            Provincia.addItem("Valencia");
-            Provincia.addItemListener(this);
-        }
+                if (Pais.getSelectedItem() == "España") {
+                    Provincia.removeAllItems();
+                    Provincia.setSelectedItem(null);
+                    try {
+                        File lista = new File("C:\\accdat\\espana.txt");
+                        FileReader lector = new FileReader(lista);
+                        BufferedReader BR = new BufferedReader(lector);
+                        String linea = BR.readLine();
+
+                        while (linea != null) {
+                            Provincia.addItem(linea);
+                            linea = BR.readLine();
+                        }
+                    } catch (Exception Ex) {
+
+                    }
+                }
+
+            }
+        });
+
     }
 
     private void intitCheckBox() {
@@ -245,16 +273,34 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
         Castellano.setBounds(430, 260, 90, 30);
         Castellano.setBackground(Color.WHITE);
         add(Castellano);
+        Castellano.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Otroidioma.setVisible(false);
+            }
+        });
 
         Ingles = new JCheckBox("Inglés");
         Ingles.setBounds(520, 260, 70, 30);
         Ingles.setBackground(Color.WHITE);
         add(Ingles);
+        Ingles.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Otroidioma.setVisible(false);
+            }
+        });
 
         Frances = new JCheckBox("Frances");
         Frances.setBounds(590, 260, 90, 30);
         Frances.setBackground(Color.WHITE);
         add(Frances);
+        Frances.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Otroidioma.setVisible(false);
+            }
+        });
 
         Mas = new JCheckBox("Otros");
         Mas.setBounds(680, 260, 90, 30);
@@ -265,11 +311,12 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
             public void actionPerformed(ActionEvent e) {
                 Otroidioma = new JTextField("");
                 add(Otroidioma);
-                Otroidioma.setBounds(6800,300,100,30);
+                Otroidioma.setBounds(500,300,100,30);
                 Otroidioma.setOpaque(true);
                 Otroidioma.setBackground(Color.WHITE);
                 Otroidioma.setBorder(new LineBorder(Color.DARK_GRAY));
                 Otroidioma.setForeground(Color.BLACK);
+                Otroidioma.setVisible(true);
 
 
             }
@@ -321,16 +368,16 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
         //aqui definimos la Pantalla de nuestro proyecto
         setLayout(null);
         setTitle("Formulario");
-        setSize(450,510);
         setBackground(Color.GRAY);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(Color.GRAY);
         setVisible(true);
+        setSize(1400,900);
     }
 
     public static void main(String[] args) {
         Formulario formulario1=new Formulario();
-        formulario1.setBounds(0,0,800,500);
+        formulario1.setBounds(0,0,1650,1080);
         formulario1.setVisible(true);
 
     }
