@@ -28,8 +28,9 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
     private ButtonGroup Sexo;
     private JTextArea Cartadepresesentación;
     private JMenuBar menuBar;
-    private JMenu Colores;
-    private JMenuItem Azul,Rojo,Verde,Gris, Salir;
+    private JMenu Colores, Fuentes;
+    private JMenuItem Azul,Rojo,Verde,Gris, Salir,x12,x20,x26,x32,x40;
+    private Font fuente = new Font("Calibri",3,12);
     private JPasswordField modoincognito;
     JTextPane ejecutado = new JTextPane();
     int numLabels = 14;
@@ -63,6 +64,24 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
         // Este es un menu donde puedes cambiar el color del fondo y cerrar la aplicación
         menuBar = new JMenuBar();
         setJMenuBar(menuBar);
+        Fuentes = new JMenu("Tamaño");
+        menuBar.add(Fuentes);
+
+        x12 = new JMenuItem("20");
+        Fuentes.add(x12);
+
+        x20 = new JMenuItem("18");
+        Fuentes.add(x26);
+
+        x26 = new JMenuItem("15");
+        Fuentes.add(x26);
+
+
+        x32 = new JMenuItem("10");
+        Fuentes.add(x32);
+
+        x40 = new JMenuItem("8");
+        Fuentes.add(x40);
 
         Colores = new JMenu("Colores");
         menuBar.add(Colores);
@@ -114,6 +133,14 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
                 System.exit(0);
             }
 
+        });
+        x12.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(int i = 13;i<13;i++){
+                    labels[i].setFont(fuente);
+                }
+            }
         });
     }
     private void initTExtPane() {
