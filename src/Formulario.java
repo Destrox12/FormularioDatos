@@ -16,6 +16,7 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
     JTextField [] TextField = new JTextField[8];
     String [] TextoLabel ={"Nombre:","Apellido:","Dirección:","telefono:","CP:","NIF:","Email:","Contraseña:","Pais:","Provincia:","Poblacion:","Sexo:","Idiomas:","carta de presentación"};
     String [] Paises ={"España","Francia","Portugal"};
+    String letras="abcdefghijklmnñopqrsuvwxyz";
     int [] xLabels = {10,330,10,330,10,330,10,300,10,160,360,10,310,10};
     int [] yLabels = {10,10,60,60,110,110,160,160,210,210,210,260,260,315};
     int [] xTextField = {120,450,120,450,120,450,120,460};
@@ -71,7 +72,7 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
         Fuentes.add(x12);
 
         x20 = new JMenuItem("18");
-        Fuentes.add(x26);
+        Fuentes.add(x20);
 
         x26 = new JMenuItem("15");
         Fuentes.add(x26);
@@ -173,19 +174,60 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
                     if(Hombre.isSelected()){sexo= "Hombre";
                     }else if(Mujer.isSelected()){sexo= "Mujer";
                     }else{sexo ="Otro";}
+                    String telefono="";
+                        if (TextField[3].getText().contains(letras)) {
+                            telefono="Telefono no valido";
+                        }
+                        else{
+                            telefono=TextField[3].getText();
+                        }
+                    String[] caracteres="TRWAGMYFPDXBNJZSQVHLCKE".split("");
+                    String nif;
+                    String num="";
+                    for (int i=0; i<8; i++) {
+                        // si es numero, lo recojo en un String
+                        num += TextField[5].getText().charAt(i);
+                    }
+                    int dni=Integer.parseInt(num);
+
+                    int resto = dni%23;
+                    String letra=caracteres[resto];
+                        if(letra.equals(""+TextField[5].getText().charAt(8))){
+                        nif=TextField[5].getText();
+                         }
+                         else{
+                        nif="Dni no válido";
+                         }
+
+                    String cp;
+                    if (TextField[4].getText().contains(letras)) {
+                        cp="Código postal no valido";
+                    }
+                    else{
+                        cp=TextField[4].getText();
+                    }
+                    String email;
+                    if (TextField[6].getText().contains("@")) {
+
+                        email=TextField[6].getText();
+                    }
+                    else{
+                        email="Email no valido";
+                    }
                     if(Castellano.isSelected()){numero_idiomas=numero_idiomas+"Castelllano";}
                     if(Frances.isSelected()){numero_idiomas=numero_idiomas+" Frances";}
                     if(Ingles.isSelected()){numero_idiomas=numero_idiomas+" Inglés";}
                     if(Mas.isSelected()){numero_idiomas=numero_idiomas+" Japonees";}
                     ejecutado.setText(
+
                             //aqui definimos que se va a trasmitir dentro del jPanel y en que orden y como
                             "<span style='margin-left:50px;'>&nbsp;&nbsp;Nombre</span><br>" + TextField[0].getText()+"<br>"+
                                     "<i>Apellido</i><br>" + TextField[1].getText()+"<br>"+
                                     "<i>Dirección</i><br>"+TextField[2].getText()+"<br>"+
-                                    "<i>teléfono</i><br>"+TextField[3].getText()+"<br>"+
-                                    "<i>CP</i><br>"+TextField[4].getText()+"<br>"+
-                                    "<i>NIF</i><br>"+TextField[5].getText()+"<br>"+
-                                    "<i>Email</i><br>"+TextField[6].getText()+"<br>"+
+                                    "<i>teléfono</i><br>"+telefono+"<br>"+
+                                    "<i>CP</i><br>"+cp+"<br>"+
+                                    "<i>NIF</i><br>"+nif+"<br>"+
+                                    "<i>Email</i><br>"+email+"<br>"+
                                     "<i>Contraseña</i><br>"+modoincognito.getText()+"<br>"+
                                     "<i>Pais</i><br>"+Pais.getItemAt(Pais.getSelectedIndex())+"<br>"+
                                     "<i>Provincia</i><br>"+Provincia.getItemAt(Provincia.getSelectedIndex())+"<br>"+
@@ -196,6 +238,7 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
 
 
                     );
+                    ejecutado.setVisible(true);
                 }
             }
         });
@@ -258,7 +301,7 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
                     Provincia.getSelectedItem();
 
                     try {
-                        File rutaEEUU = new File("C:\\accdat\\EEUU.txt");
+                        File rutaEEUU = new File(".\\src\\EEUU.txt");
                         FileReader escribir = new FileReader(rutaEEUU);
                         BufferedReader BR = new BufferedReader(escribir);
                         String linea = BR.readLine();
@@ -275,7 +318,7 @@ public class Formulario extends JFrame implements ChangeListener,ItemListener {
                     Provincia.removeAllItems();
                     Provincia.setSelectedItem(null);
                     try {
-                        File lista = new File("C:\\accdat\\espana.txt");
+                        File lista = new File(".\\src\\espana.txt");
                         FileReader lector = new FileReader(lista);
                         BufferedReader BR = new BufferedReader(lector);
                         String linea = BR.readLine();
